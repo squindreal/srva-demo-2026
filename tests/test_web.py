@@ -25,6 +25,7 @@ class TestWeboveRozhrani(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
         html = res.data.decode("utf-8")
         self.assertIn("Brixa Meeting Rooms", html)
+        self.assertIn("ŠKODA", html)
         self.assertIn("Tichá budka (1. patro)", html)
         self.assertIn("Hlavní zasedačka", html)
         self.assertIn("Uložit rezervaci", html)

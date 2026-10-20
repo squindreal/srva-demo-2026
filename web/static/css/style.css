@@ -62,10 +62,11 @@ body {
    ========================================================================== */
 
 .app-header {
-    background: #0f172a;
+    background: linear-gradient(135deg, #061812 0%, #0E3A2F 60%, #12483a 100%);
     color: #ffffff;
-    padding: 1.25rem 2rem;
+    padding: 1.15rem 2rem;
     box-shadow: var(--shadow-md);
+    border-bottom: 1px solid rgba(120, 250, 174, 0.2);
     position: sticky;
     top: 0;
     z-index: 50;
@@ -82,21 +83,36 @@ body {
 .brand {
     display: flex;
     align-items: center;
-    gap: 1rem;
+    gap: 1.25rem;
 }
 
-.brand-logo {
-    width: 44px;
-    height: 44px;
-    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-    border-radius: var(--radius-md);
-    display: flex;
+.brand-logo.skoda-logo {
+    height: 42px;
+    width: auto;
+    padding: 0 1.15rem;
+    background: #061f18;
+    border: 2px solid #78FAAE;
+    border-radius: var(--radius-sm);
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.45rem;
-    font-weight: 700;
-    color: #ffffff;
-    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.35);
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35), 0 0 16px rgba(120, 250, 174, 0.25);
+    transition: all 0.2s ease;
+}
+
+.brand-logo.skoda-logo:hover {
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4), 0 0 22px rgba(120, 250, 174, 0.45);
+    transform: translateY(-1px);
+}
+
+.skoda-wordmark {
+    color: #78FAAE;
+    font-size: 1.15rem;
+    font-weight: 800;
+    letter-spacing: 0.18em;
+    line-height: 1;
+    text-transform: uppercase;
+    text-shadow: 0 0 10px rgba(120, 250, 174, 0.4);
 }
 
 .brand-text h1 {
@@ -108,27 +124,27 @@ body {
 
 .brand-tagline {
     font-size: 0.85rem;
-    color: #94a3b8;
+    color: #a7f3d0;
 }
 
 .header-badge {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    background: rgba(255, 255, 255, 0.08);
-    padding: 0.4rem 0.85rem;
+    background: rgba(14, 58, 47, 0.6);
+    padding: 0.4rem 0.95rem;
     border-radius: var(--radius-full);
-    font-size: 0.8rem;
-    color: #cbd5e1;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.825rem;
+    color: #ecfdf5;
+    border: 1px solid rgba(120, 250, 174, 0.3);
 }
 
 .status-indicator {
-    width: 8px;
-    height: 8px;
-    background-color: #10b981;
+    width: 9px;
+    height: 9px;
+    background-color: #78FAAE;
     border-radius: 50%;
-    box-shadow: 0 0 8px #10b981;
+    box-shadow: 0 0 10px #78FAAE;
     display: inline-block;
     animation: pulse 2s infinite;
 }

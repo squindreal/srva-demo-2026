@@ -29,7 +29,7 @@ Projekt striktně dodržuje třívrstvou architekturu:
   1. **Seznam místností:** Přehledné karty zasedaček s patrem a kapacitou.
   2. **Přehled rezervací dne:** Strukturovaná tabulka s časovým blokem, zasedačkou, organizátorem, účelem a automatickým systémovým časem zápisu.
   3. **Formulář rezervace:** Přehledný formulář s automatickou kontrolou překryvu a jasnými chybovými hlášeními.
-  - Nevolá SQL přímo, využívá aplikační logiku. Servírování stylů CSS zajištěno přes `web/static/css/style.css`.
+  - Nevolá SQL přímo, využívá aplikační logiku. Záhlaví a design systém jsou stylizovány v korporátní identitě ŠKODA (Deep Emerald, Electric Green) s textovým logem ŠKODA. Servírování stylů CSS zajištěno přes `web/static/css/style.css`.
 - `logika/`: Aplikační logika, validace vstupů, automatické generování času vzniku rezervace a kontrola překryvu intervalů ($A_{od} < B_{do} \land A_{do} > B_{od}$).
 - `uloziste/`: Databázová vrstva pracující s SQLite přes modul `sqlite3`, automatická tvorba schématu a vložení syntetických zasedacích místností.
 - `tests/`: Sada automatických testů (detekce kolizí rezervací, překryv zleva/zprava/vnoření/obepnutí, povolené návaznosti, webové rozhraní a dostupnost CSS stylů).
