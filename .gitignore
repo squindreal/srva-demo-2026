@@ -1,0 +1,12 @@
+# Databáze a lokální konfigurace (dle pravidel projektu)
+*.db
+*.sqlite
+*.sqlite3
+.env
+
+# Python mezipaměť
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
