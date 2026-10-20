@@ -7,7 +7,11 @@ from web.routes import web_bp
 
 def create_app(db_path: str = "rezervace.db") -> Flask:
     """Tovární funkce pro vytvoření a konfiguraci Flask aplikace."""
-    app = Flask(__name__)
+    app = Flask(
+        __name__,
+        static_folder="web/static",
+        static_url_path="/static",
+    )
     
     # Tajný klíč pro flash zprávy
     app.secret_key = os.environ.get("SECRET_KEY", "brixa-zasedacky-tajny-klic-2026")

@@ -87,6 +87,13 @@ class TestWeboveRozhrani(unittest.TestCase):
         self.assertIn("Klára Benešová", html)
         self.assertIn("Strategický workshop", html)
 
+    def test_staticky_soubor_css_je_dostupny(self):
+        """Ověří, že CSS styly jsou správně servírovány pod /static/css/style.css."""
+        res = self.client.get("/static/css/style.css")
+        self.assertEqual(res.status_code, 200)
+        self.assertIn("BRIXA", res.data.decode("utf-8"))
+        self.assertIn(".rooms-grid", res.data.decode("utf-8"))
+
 
 if __name__ == "__main__":
     unittest.main()
