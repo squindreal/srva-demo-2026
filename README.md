@@ -8,18 +8,27 @@ Webový rezervační systém pro firmu Brixa (60 zaměstnanců, 6 zasedaček). S
    ```bash
    pip install flask
    ```
-2. Spusťte aplikaci jedním příkazem *(plánováno)*:
+2. Spusťte aplikaci jedním příkazem:
    ```bash
    py app.py
    ```
 3. Otevřete prohlížeč na adrese `http://127.0.0.1:5000`.
 
+### Spuštění automatických testů
+
+K otestování validačních pravidel (zejména striktního zákazu překryvu rezervací) a webového rozhraní spusťte:
+```bash
+py -m unittest discover tests
+```
+
 ## Struktura projektu
 
 Projekt striktně dodržuje třívrstvou architekturu:
-- `web/` *(plánováno)*: Uživatelské rozhraní, šablony a webové routy (nevolá SQL přímo).
-- `logika/` *(plánováno)*: Aplikační logika, validace rezervací a chytrá pravidla (uvolňování neobsazených místností).
-- `uloziste/` *(plánováno)*: Databázová vrstva pracující s SQLite přes modul `sqlite3`.
+- `web/`: Uživatelské rozhraní, Jinja2 šablony, moderní Vanilla CSS styly a webové routy (nevolá SQL přímo).
+- `logika/`: Aplikační logika, validace vstupů, automatické generování času vzniku rezervace a kontrola překryvu intervalů ($A_{od} < B_{do} \land A_{do} > B_{od}$).
+- `uloziste/`: Databázová vrstva pracující s SQLite přes modul `sqlite3`, automatická tvorba schématu a vložení syntetických zasedacích místností.
+- `tests/`: Sada automatických testů (detekce kolizí rezervací, překryv zleva/zprava/vnoření/obepnutí, povolené návaznosti, webové rozhraní).
+- `app.py`: Jediný spouštěcí vstupní bod aplikace.
 - `docs/`: Analytický návrh systému (`NAVRH.md`).
 - `GEMINI.md`: Pravidla vývoje a postupu prací.
 - `README.md`: Základní dokumentace a příručka ke spuštění.

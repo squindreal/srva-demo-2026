@@ -1,0 +1,1 @@
+"""Balíček s automatickými testy."""

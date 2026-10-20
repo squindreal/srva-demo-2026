@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Rezervace zasedaček | Brixa{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('web.static', filename='css/style.css') }}">
+</head>
+<body>
+    <header class="app-header">
+        <div class="header-container">
+            <div class="brand">
+                <div class="brand-logo">B</div>
+                <div class="brand-text">
+                    <h1>Brixa Meeting Rooms</h1>
+                    <p class="brand-tagline">Evidence zasedaček a správa rezervací</p>
+                </div>
+            </div>
+            <div class="header-badge">
+                <span class="status-indicator"></span>
+                <span>Systém aktivní</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="main-content">
+        <div class="container">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-container" id="flash-container">
+                        {% for category, message in messages %}
+                            <div class="flash-alert flash-{{ category }}" role="alert" id="alert-message">
+                                <div class="flash-icon">
+                                    {% if category == 'danger' %}⚠️{% else %}✅{% endif %}
+                                </div>
+                                <div class="flash-content">
+                                    <strong>{% if category == 'danger' %}Chyba rezervace:{% else %}Úspěch:{% endif %}</strong>
+                                    <span>{{ message }}</span>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <footer class="app-footer">
+        <div class="container footer-content">
+            <p>© 2026 Brixa s.r.o. – Interní rezervační systém</p>
+            <p class="footer-note">Třívrstvá architektura dle specifikace v <code>docs/NAVRH.md</code></p>
+        </div>
+    </footer>
+</body>
+</html>
