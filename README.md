@@ -6,8 +6,9 @@ Webový rezervační systém pro firmu Brixa (60 zaměstnanců, 6 zasedaček). S
 
 1. Nainstalujte závislosti:
    ```bash
-   pip install flask
+   py -m pip install flask
    ```
+   *(nebo `pip install flask`, pokud máte pip v systémové cestě PATH)*
 2. Spusťte aplikaci jedním příkazem:
    ```bash
    py app.py
@@ -24,7 +25,11 @@ py -m unittest discover tests
 ## Struktura projektu
 
 Projekt striktně dodržuje třívrstvou architekturu:
-- `web/`: Uživatelské rozhraní, Jinja2 šablony, moderní Vanilla CSS styly a webové routy (nevolá SQL přímo).
+- `web/`: Uživatelské rozhraní rozdělené do tří přehledných sekcí:
+  1. **Seznam místností:** Přehledné karty zasedaček s patrem a kapacitou.
+  2. **Přehled rezervací dne:** Strukturovaná tabulka s časovým blokem, zasedačkou, organizátorem, účelem a automatickým systémovým časem zápisu.
+  3. **Formulář rezervace:** Přehledný formulář s automatickou kontrolou překryvu a jasnými chybovými hlášeními.
+  - Nevolá SQL přímo, využívá aplikační logiku.
 - `logika/`: Aplikační logika, validace vstupů, automatické generování času vzniku rezervace a kontrola překryvu intervalů ($A_{od} < B_{do} \land A_{do} > B_{od}$).
 - `uloziste/`: Databázová vrstva pracující s SQLite přes modul `sqlite3`, automatická tvorba schématu a vložení syntetických zasedacích místností.
 - `tests/`: Sada automatických testů (detekce kolizí rezervací, překryv zleva/zprava/vnoření/obepnutí, povolené návaznosti, webové rozhraní).

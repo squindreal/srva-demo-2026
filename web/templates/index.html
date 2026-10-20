@@ -1,157 +1,189 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="dashboard-grid">
-    <!-- Levý sloupec: Seznam místností a Formulář rezervace -->
-    <div class="left-column">
-        <!-- 1. SEZNAM MÍSTNOSTÍ -->
-        <section class="card section-card" id="section-mistnosti">
-            <div class="card-header">
-                <h2>🏢 Přehled zasedacích místností</h2>
-                <span class="badge badge-neutral">{{ zasedacky|length }} místností celkem</span>
+<div class="layout-container">
+
+    <!-- ====================================================================
+         1. SEZNAM MÍSTNOSTÍ (Název, patro, kapacita)
+         ==================================================================== -->
+    <section class="card mb-4" id="section-mistnosti">
+        <div class="card-header">
+            <div>
+                <h2>🏢 Seznam zasedacích místností</h2>
+                <p class="section-subtitle">Přehled všech zasedaček s informací o patře a kapacitě osob</p>
             </div>
-            <div class="card-body">
-                <div class="rooms-grid" id="rooms-grid">
-                    {% for m in zasedacky %}
-                        <div class="room-item" id="room-item-{{ m.id }}" onclick="vyberMistnost({{ m.id }})">
-                            <div class="room-item-header">
-                                <h3 class="room-title">{{ m.nazev }}</h3>
-                                <span class="badge badge-floor">{{ m.patro }}. patro</span>
-                            </div>
-                            <div class="room-meta">
-                                <span class="room-capacity">👥 Kapacita: <strong>{{ m.kapacita }} osob</strong></span>
-                            </div>
-                            <button type="button" class="btn btn-secondary btn-sm" onclick="event.stopPropagation(); vyberMistnost({{ m.id }})">
-                                Zvolit pro rezervaci →
-                            </button>
+            <span class="badge badge-neutral">{{ zasedacky|length }} místností k dispozici</span>
+        </div>
+        <div class="card-body">
+            <div class="rooms-grid" id="rooms-grid">
+                {% for m in zasedacky %}
+                    <div class="room-card" id="room-item-{{ m.id }}" onclick="vyberMistnost({{ m.id }})">
+                        <div class="room-card-header">
+                            <span class="room-icon">🚪</span>
+                            <span class="badge badge-floor">{{ m.patro }}. patro</span>
                         </div>
-                    {% endfor %}
-                </div>
-            </div>
-        </section>
-
-        <!-- 2. FORMULÁŘ REZERVACE -->
-        <section class="card section-card" id="section-formular">
-            <div class="card-header">
-                <h2>📝 Nová rezervace</h2>
-                <span class="badge badge-accent">Bez překryvu</span>
-            </div>
-            <div class="card-body">
-                <form action="{{ url_for('web.nova_rezervace') }}" method="POST" id="form-rezervace" class="reservation-form">
-                    <div class="form-group">
-                        <label for="select-mistnost">Zasedací místnost <span class="required">*</span></label>
-                        <select name="zasedacka_id" id="select-mistnost" class="form-control" required>
-                            <option value="">-- Vyberte místnost --</option>
-                            {% for m in zasedacky %}
-                                <option value="{{ m.id }}">{{ m.nazev }} ({{ m.patro }}. patro, kapacita {{ m.kapacita }} osob)</option>
-                            {% endfor %}
-                        </select>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="input-kdo">Kdo rezervuje (jméno a příjmení) <span class="required">*</span></label>
-                        <input type="text" name="kdo" id="input-kdo" class="form-control" placeholder="Např. Klára Benešová" required>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="input-datum">Datum rezervace <span class="required">*</span></label>
-                        <input type="date" name="datum" id="input-datum" class="form-control" value="{{ vybrane_datum }}" required>
-                    </div>
-
-                    <div class="form-row">
-                        <div class="form-group col-half">
-                            <label for="input-cas-od">Čas od <span class="required">*</span></label>
-                            <input type="time" name="cas_od" id="input-cas-od" class="form-control" value="09:00" required>
+                        <h3 class="room-name">{{ m.nazev }}</h3>
+                        <div class="room-capacity-line">
+                            <span class="capacity-icon">👥</span>
+                            <span>Kapacita: <strong>{{ m.kapacita }} osob</strong></span>
                         </div>
-                        <div class="form-group col-half">
-                            <label for="input-cas-do">Čas do <span class="required">*</span></label>
-                            <input type="time" name="cas_do" id="input-cas-do" class="form-control" value="10:00" required>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="input-ucel">Účel rezervace / předmět jednání <span class="required">*</span></label>
-                        <input type="text" name="ucel" id="input-ucel" class="form-control" placeholder="Např. Týdenní plánování sprintu" required>
-                    </div>
-
-                    <div class="form-info-note">
-                        ℹ️ <em>Čas vytvoření rezervace se zapíše do systému automaticky.</em>
-                    </div>
-
-                    <div class="form-actions">
-                        <button type="submit" id="btn-submit-rezervace" class="btn btn-primary btn-block">
-                            Uložit rezervaci
+                        <button type="button" class="btn btn-secondary btn-sm btn-block" onclick="event.stopPropagation(); vyberMistnost({{ m.id }})">
+                            Rezervovat místnost →
                         </button>
                     </div>
-                </form>
+                {% endfor %}
             </div>
-        </section>
-    </div>
+        </div>
+    </section>
 
-    <!-- Pravý sloupec: Přehled rezervací dne -->
-    <div class="right-column">
-        <!-- 3. PŘEHLED REZERVACÍ DNE -->
-        <section class="card section-card" id="section-prehled-dne">
-            <div class="card-header header-with-filter">
-                <div>
-                    <h2>📅 Přehled rezervací dne</h2>
-                    <p class="section-subtitle">Přehled všech zasedaček pro vybraný datum</p>
-                </div>
-                <form action="{{ url_for('web.index') }}" method="GET" class="filter-form" id="form-filtr-data">
-                    <label for="filter-datum" class="sr-only">Vybrat datum:</label>
-                    <input type="date" name="datum" id="filter-datum" class="form-control form-control-sm" value="{{ vybrane_datum }}" onchange="this.form.submit()">
-                    <button type="submit" id="btn-filter-datum" class="btn btn-secondary btn-sm">Zobrazit</button>
-                    {% if vybrane_datum != dnes %}
-                        <a href="{{ url_for('web.index') }}" class="btn btn-outline btn-sm">Dnes</a>
-                    {% endif %}
-                </form>
+    <!-- ====================================================================
+         2. PŘEHLED REZERVACÍ DNE (Přehledná tabulka)
+         ==================================================================== -->
+    <section class="card mb-4" id="section-prehled-dne">
+        <div class="card-header header-with-filter">
+            <div>
+                <h2>📅 Přehled rezervací dne</h2>
+                <p class="section-subtitle">Časový harmonogram obsazení místností pro zvolený den</p>
             </div>
-            <div class="card-body">
-                {% if rezervace %}
-                    <div class="reservations-timeline" id="reservations-list">
-                        {% for r in rezervace %}
-                            <div class="reservation-card" id="reservation-card-{{ r.id }}">
-                                <div class="reservation-card-time">
-                                    <span class="time-block">
-                                        {{ r.od[11:16] }} – {{ r.do[11:16] }}
-                                    </span>
-                                    <span class="date-sub">{{ r.od[:10] }}</span>
-                                </div>
-                                <div class="reservation-card-details">
-                                    <div class="res-room-name">
-                                        {{ r.mistnost_nazev }}
-                                        <span class="badge badge-floor-sm">{{ r.mistnost_patro }}. patro</span>
-                                    </div>
-                                    <div class="res-purpose">
-                                        <strong>Účel:</strong> {{ r.ucel }}
-                                    </div>
-                                    <div class="res-meta-line">
-                                        <span>👤 <strong>Kdo:</strong> {{ r.kdo }}</span>
-                                        <span class="res-created">⏱️ <em>Vytvořeno: {{ r.cas_vytvoreni }}</em></span>
-                                    </div>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
-                {% else %}
-                    <div class="empty-state" id="empty-reservations-state">
-                        <div class="empty-state-icon">🗓️</div>
-                        <h3>Pro den {{ vybrane_datum }} nejsou evidovány žádné rezervace</h3>
-                        <p>Všechny zasedací místnosti jsou pro tento den v tento okamžik volné.</p>
-                    </div>
+            <form action="{{ url_for('web.index') }}" method="GET" class="filter-form" id="form-filtr-data">
+                <label for="filter-datum" class="filter-label">Vybrat datum:</label>
+                <input type="date" name="datum" id="filter-datum" class="form-control form-control-sm" value="{{ vybrane_datum }}" onchange="this.form.submit()">
+                <button type="submit" id="btn-filter-datum" class="btn btn-secondary btn-sm">Zobrazit</button>
+                {% if vybrane_datum != dnes %}
+                    <a href="{{ url_for('web.index') }}" class="btn btn-outline btn-sm">Dnešní den</a>
                 {% endif %}
+            </form>
+        </div>
+        <div class="card-body">
+            {% if rezervace %}
+                <div class="table-responsive">
+                    <table class="table-reservations" id="reservations-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 140px;">Čas (Od – Do)</th>
+                                <th style="width: 220px;">Zasedací místnost</th>
+                                <th style="width: 180px;">Kdo rezervoval</th>
+                                <th>Účel jednání</th>
+                                <th style="width: 180px;">Čas vytvoření</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for r in rezervace %}
+                                <tr id="reservation-row-{{ r.id }}">
+                                    <td class="col-time">
+                                        <span class="time-badge">{{ r.od[11:16] }} – {{ r.do[11:16] }}</span>
+                                    </td>
+                                    <td class="col-room">
+                                        <strong>{{ r.mistnost_nazev }}</strong>
+                                        <span class="badge badge-floor-sm">{{ r.mistnost_patro }}. patro</span>
+                                    </td>
+                                    <td class="col-who">
+                                        <span class="user-avatar">👤</span> {{ r.kdo }}
+                                    </td>
+                                    <td class="col-purpose">
+                                        {{ r.ucel }}
+                                    </td>
+                                    <td class="col-created">
+                                        <small class="text-muted">⏱️ Vytvořeno: {{ r.cas_vytvoreni }}</small>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="empty-state" id="empty-reservations-state">
+                    <div class="empty-state-icon">🗓️</div>
+                    <h3>Pro vybraný den ({{ vybrane_datum }}) nejsou evidovány žádné rezervace</h3>
+                    <p>Všechny zasedací místnosti jsou v tento den v plném rozsahu volné k rezervaci.</p>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- ====================================================================
+         3. FORMULÁŘ REZERVACE (Místnost, kdo, od, do, účel)
+         ==================================================================== -->
+    <section class="card" id="section-formular">
+        <div class="card-header">
+            <div>
+                <h2>📝 Formulář nové rezervace</h2>
+                <p class="section-subtitle">Vytvoření jednorázové rezervace (systém automaticky odmítne překrývající se časy)</p>
             </div>
-        </section>
-    </div>
+            <span class="badge badge-accent">Automatická kontrola kolizí</span>
+        </div>
+        <div class="card-body">
+            <form action="{{ url_for('web.nova_rezervace') }}" method="POST" id="form-rezervace" class="reservation-form">
+                <div class="form-grid">
+                    <!-- Levý sloupec polí -->
+                    <div class="form-column">
+                        <div class="form-group">
+                            <label for="select-mistnost">Zasedací místnost <span class="required">*</span></label>
+                            <select name="zasedacka_id" id="select-mistnost" class="form-control" required>
+                                <option value="">-- Vyberte místnost ze seznamu --</option>
+                                {% for m in zasedacky %}
+                                    <option value="{{ m.id }}">{{ m.nazev }} ({{ m.patro }}. patro, kapacita {{ m.kapacita }} osob)</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="input-kdo">Kdo rezervuje (jméno organizátora) <span class="required">*</span></label>
+                            <input type="text" name="kdo" id="input-kdo" class="form-control" placeholder="Např. Klára Benešová" required>
+                        </div>
+                    </div>
+
+                    <!-- Pravý sloupec polí -->
+                    <div class="form-column">
+                        <div class="form-group">
+                            <label for="input-datum">Datum rezervace <span class="required">*</span></label>
+                            <input type="date" name="datum" id="input-datum" class="form-control" value="{{ vybrane_datum }}" required>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group col-half">
+                                <label for="input-cas-od">Čas od <span class="required">*</span></label>
+                                <input type="time" name="cas_od" id="input-cas-od" class="form-control" value="09:00" required>
+                            </div>
+                            <div class="form-group col-half">
+                                <label for="input-cas-do">Čas do <span class="required">*</span></label>
+                                <input type="time" name="cas_do" id="input-cas-do" class="form-control" value="10:00" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group mt-3">
+                    <label for="input-ucel">Účel rezervace / předmět schůzky <span class="required">*</span></label>
+                    <input type="text" name="ucel" id="input-ucel" class="form-control" placeholder="Např. Plánování rozpočtu a status projektu Brixa" required>
+                </div>
+
+                <div class="form-footer-bar">
+                    <div class="form-info-note">
+                        ℹ️ <strong>Čas vytvoření rezervace</strong> se do databáze zapíše sám automaticky (podle systémových hodin).
+                    </div>
+                    <button type="submit" id="btn-submit-rezervace" class="btn btn-primary btn-lg">
+                        Uložit rezervaci
+                    </button>
+                </div>
+            </form>
+        </div>
+    </section>
+
 </div>
 
 <script>
 function vyberMistnost(id) {
     const select = document.getElementById('select-mistnost');
+    const formSection = document.getElementById('section-formular');
     if (select) {
         select.value = id;
-        select.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        select.focus();
+    }
+    if (formSection) {
+        formSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        setTimeout(() => {
+            select.focus();
+        }, 400);
     }
 }
 </script>
