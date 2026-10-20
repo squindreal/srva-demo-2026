@@ -25,10 +25,10 @@ py -m unittest discover tests
 ## Struktura projektu
 
 Projekt striktně dodržuje třívrstvou architekturu:
-- `web/`: Uživatelské rozhraní rozdělené do tří přehledných sekcí:
-  1. **Seznam místností:** Přehledné karty zasedaček s patrem a kapacitou.
-  2. **Přehled rezervací dne:** Strukturovaná tabulka s časovým blokem, zasedačkou, organizátorem, účelem a automatickým systémovým časem zápisu.
-  3. **Formulář rezervace:** Přehledný formulář s automatickou kontrolou překryvu a jasnými chybovými hlášeními.
+- `web/`: Uživatelské rozhraní optimalizované do kompaktního dashboardu bez nutnosti rolování stránky:
+  1. **Horizontální proužek zasedaček:** 6 kompaktních klikacích karet v jednom řádku s patrem a kapacitou.
+  2. **Formulář rezervace (vlevo):** Přehledný formulář s automatickou kontrolou překryvu a jasnými chybovými hlášeními.
+  3. **Přehled rezervací dne (vpravo):** Kompaktní tabulka s časovým blokem, zasedačkou, organizátorem, účelem a interním scrollem.
   - Nevolá SQL přímo, využívá aplikační logiku. Záhlaví a design systém jsou stylizovány v korporátní identitě ŠKODA (Deep Emerald, Electric Green) s textovým logem ŠKODA. Servírování stylů CSS zajištěno přes `web/static/css/style.css`.
 - `logika/`: Aplikační logika, validace vstupů, automatické generování času vzniku rezervace a kontrola překryvu intervalů ($A_{od} < B_{do} \land A_{do} > B_{od}$).
 - `uloziste/`: Databázová vrstva pracující s SQLite přes modul `sqlite3`, automatická tvorba schématu a vložení syntetických zasedacích místností.
